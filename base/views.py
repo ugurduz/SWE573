@@ -103,7 +103,7 @@ def signin(request):
 @login_required(login_url='login_register')
 def events(request):
 
-    search_query='aaa'
+    search_query=''
     if request.GET.get('search_query'):
         search_query = request.GET.get('search_query')
 
