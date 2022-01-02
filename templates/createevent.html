@@ -1,0 +1,16 @@
+{%extends 'main.html'%}
+
+{% block content %}
+
+<h1>Create Event</h1>
+{% if profile.credits >= 15 %}
+<p>You are not allowed to create a new Offer. First you need to purchase some other offers to decrease your credits.</p>
+{% else %}
+<form action="" method="POST" enctype="multipart/form-data" action="/foo/">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit">
+</form>
+{% endif %}
+
+{% endblock content %}

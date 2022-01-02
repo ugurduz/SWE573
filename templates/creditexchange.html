@@ -1,0 +1,12 @@
+{%extends 'main.html' %}
+
+{% block content %}
+
+<h5>If the offer is completed, select the status 'Done' and click 'Complete Handshake'</h5>
+<form action="" method="POST" enctype="multipart/form-data" action="/foo/">
+    {% csrf_token %}
+    {{form.as_table}}
+    <input type="submit" value="Complete Handshake">
+</form>
+
+{% endblock %}

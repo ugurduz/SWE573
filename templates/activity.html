@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+{% block content %}
+<h1>aktiviteler</h1>
+
+<ul>
+    {% for i in pages %}
+    
+    <li>
+        {{i.page}} -- {{i.description}}
+    </li>
+    
+    {% endfor %}
+</ul>
+
+{% endblock %}

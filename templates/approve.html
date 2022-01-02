@@ -1,0 +1,16 @@
+{%extends 'main.html' %}
+
+{% block content %}
+
+<h1>approve</h1>
+{% for i in attendanceObj%}
+<p>{{ i.owner.username }}</p>
+<form action="" method="POST" enctype="multipart/form-data" action="/foo/">
+    {% csrf_token %}
+    {{form.as_table}}
+    <input type="submit">
+</form>
+
+{% endfor %}
+
+{% endblock %}

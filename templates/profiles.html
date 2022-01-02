@@ -1,0 +1,16 @@
+{%extends 'main.html' %}
+
+{% block content %}
+
+<h1>profiles</h1>
+
+{% for profile in profiles %}
+
+<img src="{{ profile.picture.url }}" width="250" 
+height="350">
+<p><a href="{% url 'profile' profile.username %}">{{ profile.username }}</a></p>
+
+
+
+{% endfor %}
+{% endblock %}

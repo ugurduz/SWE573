@@ -1,0 +1,63 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+<style>
+body {
+    background: #eee
+}
+
+.filter {
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px
+}
+
+.profiles img {
+    margin-right: -6px
+}
+
+.col-md-4 {
+    margin-top: 26px
+}  
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="row mt-1">
+        {% for i in Events %}
+        <div class="col-md-4">
+            <div class="p-card bg-white p-2 rounded px-3">
+                <div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">{{i.credits}} credits</span></div>
+                <h5 class="mt-2">{{i.title}}</h5><span class="text-black-50 ml-2">{% if i.type == 'event' %} Offer {% else %} {{i.type}} {% endif %}</span><br><img src="{{i.picture.url}}" width="380px" height="300px"><span class="d-block mb-5">{{i.description}}</span>
+                <div class="d-flex justify-content-between stats">
+                    <div><i class="fa fa-calendar-o"></i><span class="ml-2">{{i.numberOfParticipants}} participants</span><br><i class="fa fa-calendar-o"></i><span class="ml-2">Location: {{i.location}}</span></div>
+                    <div class="d-flex flex-row align-items-center">
+                        <div class="profiles"><img class="rounded-circle" src="{{i.owner.picture.url}}" width="60"></div><span class="ml-3">&nbsp;provider: <a href="/profile/{{i.owner}}">{{i.owner}}</a></span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between stats">
+                    {% if i.owner == profile %}
+                    <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/event/{{i.offerid}}">View</a></span></div>
+                    <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/updateevent/{{i.offerid}}">Edit</a></span></div>
+                    <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/deleteevent/{{i.offerid}}">Change Status</a></span></div>
+                    {% else %}
+                    <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/event/{{i.offerid}}">View</a></span></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+</html>
+
+
+{% endblock %}
