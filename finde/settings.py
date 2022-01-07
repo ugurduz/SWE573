@@ -24,12 +24,10 @@ MEDIA_URL = '/media/'
 SECRET_KEY = 'django-insecure-1y_l02@_6j&uus5)x=x-pa*9kc(d_1&tz$f#(!y3m)g-ku@)wm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = ['http://findegithubdeploy1.westus.azurecontainer.io/']
+
+ALLOWED_HOSTS = ['*', 'findegithubdeploy1.westus.azurecontainer.io']
 
 
 # Application definition
