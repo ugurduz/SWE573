@@ -26,7 +26,10 @@ SECRET_KEY = 'django-insecure-1y_l02@_6j&uus5)x=x-pa*9kc(d_1&tz$f#(!y3m)g-ku@)wm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['http://findegithubdeploy1.westus.azurecontainer.io/']
 
 
 # Application definition
