@@ -54,6 +54,20 @@ body {
 
 </div>
 
+<!---->
+<div class="container mt-5 mb-5">
+    <div class="row mt-1">
+        <div class="col-md-4">
+            <div class="p-card bg-white p-2 rounded px-3">
+                <h6 class="mt-2">Location Map</h6><span class="text-black-50 ml-2" width="380px" height="300px">{{m | safe}}</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!---->
 
 </html>
 
@@ -82,7 +96,7 @@ body {
         {% if i.status == 'approved' %}
         <p>{{i.owner}} will be attending</p>
         {% elif i.status == 'rejected' %}
-        <p>{{i.owner}} Unfortunately not attending</p>
+        <p>{{i.owner}} unfortunately not attending</p>
         {% elif i is empty %}
         <p>No one</p>
         {% else %}
@@ -106,7 +120,5 @@ body {
 <p>{{i.body}}</p>
 
 {% endfor %}
-
-
     
 {% endblock %}

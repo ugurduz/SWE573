@@ -8,6 +8,8 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+from location_field.models.plain import PlainLocationField
+
 
 # Create your models here.
 
@@ -25,6 +27,7 @@ class Profiles(models.Model):
     credits = models.IntegerField(default=5, null=False, blank=False, validators=[MaxValueValidator(15), MinValueValidator(0)])
     userid = models.UUIDField(default=uuid.uuid4, unique=True,primary_key=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
+    location = PlainLocationField(default='41.083556, 29.050598', zoom=7, blank=False, null=False)
 
     def __str__(self):
         return str(self.user.username)
@@ -78,12 +81,13 @@ class Offers(models.Model):
     #attendaceList = models.ManyToManyField('Attendants', blank=True)
     date = models.DateField(auto_now_add=False)
     time = models.TimeField(auto_now_add=False)
-    location = models.CharField(max_length=20)
+    location = models.CharField(max_length=1000, blank=True, default="london")
     credits = models.IntegerField(default=0, null=False, blank=False, validators=[MaxValueValidator(15), MinValueValidator(0)])
     numberOfParticipants = models.IntegerField(default=0, null=False, blank=False)
     type = models.CharField(max_length=50, choices= OFFER_TYPE)
     eventstatus = models.CharField(max_length=50, choices= EVENTSTATUS_TYPE)
     exchange = models.CharField(max_length=50, choices= EXCHANGE_TYPE, default='no')
+    eventlocation = PlainLocationField(based_fields=['location'] , zoom=7, max_length=1000)
 
     #def save(credits):
      #   if type == "gathering":

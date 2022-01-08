@@ -4,6 +4,7 @@ from django.core.files.base import ContentFile
 from django.forms.widgets import HiddenInput
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from geocoder.api import location
 from .models import Attendants, Feedbacks, Offers, Tags, Profiles
 from .forms import ApproveForm, FeedbackForm, OffersForm, StatusForm, AttendeeForm
 from django.contrib.auth import login, authenticate, logout
@@ -14,8 +15,13 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm
 from django.db import models
 from django.db.models import Q
+import folium
+import geocoder
 
 from base import forms
+
+from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
 
 # Create your views here.
 
@@ -122,6 +128,13 @@ def event(request, pk):
     feedbackObj = Feedbacks.objects.filter(offer=pk)
     print(attendanceObj.filter(status='approved').count())
 
+    geolocator = Nominatim(user_agent="finde")
+    eventObj.location = geolocator.geocode(eventObj.location)
+    m = folium.Map(width=380,height=200, max_zoom=18, min_zoom=6, zoom_start=14,location=[eventObj.location.latitude,eventObj.location.longitude])
+    folium.Marker(location=[eventObj.location.latitude,eventObj.location.longitude] , icon=folium.Icon(color='red')).add_to(m)
+
+    m = m._repr_html_()
+
     form = ApproveForm(initial={'status': 'approval'})
     form.status = 'approval'
     
@@ -160,7 +173,7 @@ def event(request, pk):
     
                 break   
         
-    return render(request, 'event.html', {'eventObj': eventObj, 'hashtags':hashtags, 'form':form, 'profile':profile,'attendanceObj':attendanceObj, 'feedbackObj':feedbackObj})
+    return render(request, 'event.html', {'eventObj': eventObj, 'hashtags':hashtags, 'form':form, 'profile':profile,'attendanceObj':attendanceObj, 'feedbackObj':feedbackObj, 'm':m})
 
 @login_required(login_url='login_register')
 def createevent(request):
@@ -176,6 +189,26 @@ def createevent(request):
             event = form.save(commit=False)
             event.owner = profile
             event.eventstatus = 'inprogress'
+
+            #location
+            geolocator = Nominatim(user_agent="finde")
+            event.location = geolocator.geocode(event.location)
+            lat= str(event.location.latitude)
+            lng= str(event.location.longitude)
+            event.eventlocation = lat+','+lng
+            event.location=event.location.address
+            print(event.location)
+            print(event.eventlocation)
+            """"
+            geolocator = Nominatim(user_agent="finde")
+            location=request.POST.get('location')
+            loc=geocoder.osm(location)
+            lat=loc.lat
+            lng=loc.lng
+            event.eventlocation = [lat,lng]
+            m = folium.Map(width=500,height=400, max_zoom=12, min_zoom=6, zoom_start=8,location=event.eventlocation)
+            folium.Marker(location=event.eventlocation, icon=folium.Icon(color='red')).add_to(m)
+            """
             if event.type == "gathering" and event.credits != 0:
                 messages.success(request, 'For gatherings, number of credits should be zero!')
                 event.credits = 0
@@ -183,6 +216,7 @@ def createevent(request):
             
             event.save()
             return redirect('events')
+    
 
     context={'form': form, 'profile':profile}
     return render(request, 'createevent.html', context)
