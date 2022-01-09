@@ -2,6 +2,10 @@
 
 {% block content %}
 
+{% if eventObj.eventstatus == 'canceled' %}
+<h1 style=color:darkred><b>This {{eventObj.type}} is canceled </b></h1><br>
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,6 +78,15 @@ body {
 <!--------------------------->
 
 {% if profile != eventObj.owner and eventObj.eventstatus == 'inprogress' %}
+
+    {% for i in attendanceObj %}
+    {% if i.status == 'approved' and i.owner.userid == profile.userid %}
+    <h3 style=color:darkgreen>You will be attending</h3>
+    {% elif i.status == 'rejected' and i.owner.userid == profile.userid %}
+    <h3 style=color:darkred>You are unfortunately not attending</h3>
+    {% endif %}
+    {% endfor %}
+
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
             
@@ -91,7 +104,10 @@ body {
         {% endif %}
     {% endfor %}
 
+
+
 {% else %}
+    <h3>Attendance Requests:</h3><br>
     {% for i in attendanceObj %}
         {% if i.status == 'approved' %}
         <p>{{i.owner}} will be attending</p>
@@ -100,7 +116,6 @@ body {
         {% elif i is empty %}
         <p>No one</p>
         {% else %}
-            <h3>Attendance Requests:</h3><br>
             <a href="/event/{{eventObj.offerid}}/{{i.owner.userid}}">{{i.owner}}</a>
         {% endif %}
     {% endfor %}

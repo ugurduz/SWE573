@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from geocoder.api import location
 from .models import Attendants, Feedbacks, Offers, Tags, Profiles
-from .forms import ApproveForm, FeedbackForm, OffersForm, StatusForm, AttendeeForm
+from .forms import ApproveForm, FeedbackForm, OffersForm, ProfileEdit, StatusForm, AttendeeForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -73,8 +73,28 @@ def profile(request, pk):
 def account(request):
     account = request.user.profiles
     offerList =Offers.objects.filter(owner=account)
-    context = {'account':account, 'offerList': offerList}
+    attendanceList = Attendants.objects.filter(owner=account)
+    context = {'account':account, 'offerList': offerList, 'attendanceList': attendanceList}
     return render(request, 'account.html', context)
+
+@login_required(login_url='login_register')
+def editaccount(request):
+    account = request.user.profiles
+    form = ProfileEdit(instance=account)
+
+    if request.method == 'POST':
+        form = ProfileEdit(request.POST, request.FILES, instance=account)
+        if form.is_valid():
+            if len(request.FILES) != 0:
+                form.picture = request.FILES['picture']
+
+
+            form.save()
+            return redirect('account')
+    
+    context = {'account':account, 'form': form}
+    return render(request, 'editaccount.html', context)
+
 
 @login_required(login_url='login_register')
 def profiles(request):

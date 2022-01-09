@@ -3,7 +3,7 @@ import datetime as dt
 from django.db.models import fields
 from django.forms import ModelForm
 from django.forms.fields import DateTimeField
-from django.forms.widgets import DateInput, DateTimeInput
+from django.forms.widgets import DateInput, DateTimeInput, PasswordInput
 from .models import Attendants, Feedbacks, Offers, Profiles
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UsernameField
@@ -33,6 +33,15 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['email', 'username', 'password1', 'password2']
+
+#PROFILE EDIT FORM
+class ProfileEdit(ModelForm):
+    class Meta:
+        model = Profiles
+        fields = ['name', 'surname', 'email', 'password', 'interests', 'picture' ]
+        widgets = {
+            'password': PasswordInput()
+        }
 
 #APPROVAL FORMS
 class ApproveForm(ModelForm):

@@ -114,7 +114,7 @@ p {
     <div class="row justify-content-center">
         <div class="col-md-7 col-lg-4 mb-5 mb-lg-0 wow fadeIn">
             <div class="card border-0 shadow">
-                <img src="{{account.picture.url}}" alt="...">
+                <img src="{{account.picture.url}}" alt="Profile Picture">
                 <div class="card-body p-1-9 p-xl-5">
                     <div class="mb-4">
                         <h3 class="h4 mb-0">{{account.name}}&nbsp;{{account.surname}}</h3>
@@ -122,7 +122,7 @@ p {
                     </div>
                     <ul class="list-unstyled mb-4">
                         <li class="mb-3"><a href="#!"><i class="far fa-envelope display-25 me-3 text-secondary"></i>{{account.email}}</a></li>
-        
+                        <li class="mb-3"><a href="/editaccount"><i class="far display-25 me-3 text-secondary"></i>Edit Account</a></li>            
                     </ul>
                 </div>
             </div>
@@ -140,6 +140,7 @@ p {
         </div>
         <div class="container mt-5 mb-5">
             <div class="row mt-1">
+                <h5 class="mt-2">Events Created:</h5>
                 {% for i in offerList %}
                 <div class="col-md-4">
                     <div class="p-card bg-white p-2 rounded px-3">
@@ -159,6 +160,27 @@ p {
                     </div>
                 </div>
                 {% endfor %}
+            
+                <h5 class="mt-2">Events as Participant:</h5>
+                {% for i in attendanceList %}
+                <div class="col-md-4">
+                    <div class="p-card bg-white p-2 rounded px-3">
+                        <div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">{{i.event.credits}} credits</span></div>
+                        <h5 class="mt-2">{{i.event.title}}</h5><span class="text-black-50 ml-2">{% if i.event.type == 'event' %} Offer {% else %} {{i.event.type}} {% endif %}</span><br><img src="{{i.event.picture.url}}" width="380px" height="300px"><span class="d-block mb-5">{{i.event.description}}</span>
+                        <div class="d-flex justify-content-between stats">
+                            <div><i class="fa fa-calendar-o"></i><span class="ml-2">{{i.event.numberOfParticipants}} participants</span><br><i class="fa fa-calendar-o"></i><span class="ml-2">Location: {{i.event.location}}</span></div>
+                            <div class="d-flex flex-row align-items-center">
+                                <div class="profiles"><img class="rounded-circle" src="{{i.event.owner.picture.url}}" width="60"></div><span class="ml-3">&nbsp;provider: <a href="/profile/{{i.event.owner}}">{{i.event.owner}}</a></span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between stats">
+                            <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/event/{{i.event.offerid}}">View</a></span></div>
+                            <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/updateevent/{{i.event.offerid}}">Edit</a></span></div>
+                            <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/deleteevent/{{i.event.offerid}}">Change Status</a></span></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -167,6 +189,7 @@ p {
 
 </html>
 
+<a href="/editaccount">edit account</a>
 
 {% endblock %}
 
