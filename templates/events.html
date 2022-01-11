@@ -34,7 +34,7 @@ body {
         <div class="col-md-4">
             <div class="p-card bg-white p-2 rounded px-3">
                 <div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">{{i.credits}} credits</span></div>
-                <h5 class="mt-2">{{i.title}}</h5><span class="text-black-50 ml-2">{% if i.type == 'event' %} Offer {% else %} {{i.type}} {% endif %}</span><br><img src="{{i.picture.url}}" width="380px" height="300px"><span class="d-block mb-5">{{i.description}}</span>
+                <h5 class="mt-2">{{i.title}}</h5><span class="text-black-50 ml-2">{% if i.type == 'event' %} Offer {% else %} {{i.type}} {% endif %}</span><br><img src="{{i.picture.url}}" width=100% height="300px"><span class="d-block mb-5">{{i.description}}</span>
                 <div class="d-flex justify-content-between stats">
                     <div><i class="fa fa-calendar-o"></i><span class="ml-2">{{i.numberOfParticipants}} participants</span><br><i class="fa fa-calendar-o"></i><span class="ml-2">Location: {{i.location}}</span></div>
                     <div class="d-flex flex-row align-items-center">

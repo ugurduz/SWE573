@@ -132,7 +132,7 @@ p {
             <div class="ps-lg-1-6 ps-xl-5">
                 <div class="mb-5 wow fadeIn">
                     <div class="text-start mb-1-6 wow fadeIn">
-                        <h2 class="h1 mb-0 text-primary">#Interests</h2>
+                        <h2 class="h1 mb-0 text-primary">Bio and Interests</h2>
                     </div>
                     <p>{{profile.interests}}</p>
                     
@@ -141,21 +141,43 @@ p {
         </div>
         <div class="container mt-5 mb-5">
             <div class="row mt-1">
+                <h5 class="mt-2">Events Created:</h5>
                 {% for i in offerList %}
                 <div class="col-md-4">
                     <div class="p-card bg-white p-2 rounded px-3">
                         <div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">{{i.credits}} credits</span></div>
-                        <h5 class="mt-2">{{i.title}}</h5><span class="text-black-50 ml-2">{% if i.type == 'event' %} Offer {% else %} {{i.type}} {% endif %}</span><br><img src="{{i.picture.url}}" width="320px"><span class="d-block mb-5">{{i.description}}</span>
+                        <h5 class="mt-2">{{i.title}}</h5><span class="text-black-50 ml-2">{% if i.type == 'event' %} Offer {% else %} {{i.type}} {% endif %}</span><br><img src="{{i.picture.url}}" width=100% height="300px"><span class="d-block mb-5">{{i.description}}</span>
                         <div class="d-flex justify-content-between stats">
                             <div><i class="fa fa-calendar-o"></i><span class="ml-2">{{i.numberOfParticipants}} participants</span><br><i class="fa fa-calendar-o"></i><span class="ml-2">Location: {{i.location}}</span></div>
                             <div class="d-flex flex-row align-items-center">
-                                <div class="profiles"><img class="rounded-circle" src="{{i.owner.picture.url}}" width="60"></div><span class="ml-3">&emsp;provider: <a href="/profile/{{i.owner}}">{{i.owner}}</a></span>
+                                <div class="profiles"><img class="rounded-circle" src="{{i.owner.picture.url}}" width="60"></div><span class="ml-3">&nbsp;provider: <a href="/profile/{{i.owner}}">{{i.owner}}</a></span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between stats">
                             <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/event/{{i.offerid}}">View</a></span></div>
                             <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/updateevent/{{i.offerid}}">Edit</a></span></div>
                             <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/deleteevent/{{i.offerid}}">Change Status</a></span></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            
+                <h5 class="mt-2">Events as Participant:</h5>
+                {% for i in attendanceList %}
+                <div class="col-md-4">
+                    <div class="p-card bg-white p-2 rounded px-3">
+                        <div class="d-flex align-items-center credits"><img src="https://i.imgur.com/hlz6G90.png" width="16px"><span class="text-black-50 ml-2">{{i.event.credits}} credits</span></div>
+                        <h5 class="mt-2">{{i.event.title}}</h5><span class="text-black-50 ml-2">{% if i.event.type == 'event' %} Offer {% else %} {{i.event.type}} {% endif %}</span><br><img src="{{i.event.picture.url}}" width=100% height="300px"><span class="d-block mb-5">{{i.event.description}}</span>
+                        <div class="d-flex justify-content-between stats">
+                            <div><i class="fa fa-calendar-o"></i><span class="ml-2">{{i.event.numberOfParticipants}} participants</span><br><i class="fa fa-calendar-o"></i><span class="ml-2">Location: {{i.event.location}}</span></div>
+                            <div class="d-flex flex-row align-items-center">
+                                <div class="profiles"><img class="rounded-circle" src="{{i.event.owner.picture.url}}" width="60"></div><span class="ml-3">&nbsp;provider: <a href="/profile/{{i.event.owner}}">{{i.event.owner}}</a></span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between stats">
+                            <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/event/{{i.event.offerid}}">View</a></span></div>
+                            <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/updateevent/{{i.event.offerid}}">Edit</a></span></div>
+                            <div><i class="fa fa-calendar-o"></i><span class="ml-2"><a href="/deleteevent/{{i.event.offerid}}">Change Status</a></span></div>
                         </div>
                     </div>
                 </div>

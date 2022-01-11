@@ -66,7 +66,8 @@ def activity(request):
 def profile(request, pk):
     profile = Profiles.objects.get(username=pk)
     offerList =Offers.objects.filter(owner=profile)
-    context = {'profile':profile, 'offerList':offerList}
+    attendanceList = Attendants.objects.filter(owner=profile)
+    context = {'profile':profile, 'offerList':offerList, 'attendanceList':attendanceList}
     return render(request, 'profile.html', context)
 
 @login_required(login_url='login_register')
@@ -145,6 +146,7 @@ def event(request, pk):
     context = {'hashtags': hashtags}
     profile = request.user.profiles
     attendanceObj = Attendants.objects.filter(event=pk)
+    attendanceObjTwo = Attendants.objects.filter(event=pk, owner=profile)
     feedbackObj = Feedbacks.objects.filter(offer=pk)
     print(attendanceObj.filter(status='approved').count())
 
@@ -193,7 +195,7 @@ def event(request, pk):
     
                 break   
         
-    return render(request, 'event.html', {'eventObj': eventObj, 'hashtags':hashtags, 'form':form, 'profile':profile,'attendanceObj':attendanceObj, 'feedbackObj':feedbackObj, 'm':m})
+    return render(request, 'event.html', {'eventObj': eventObj, 'hashtags':hashtags, 'form':form, 'profile':profile,'attendanceObj':attendanceObj, 'feedbackObj':feedbackObj, 'm':m, 'attendanceObjTwo':attendanceObjTwo})
 
 @login_required(login_url='login_register')
 def createevent(request):
@@ -217,21 +219,14 @@ def createevent(request):
             lng= str(event.location.longitude)
             event.eventlocation = lat+','+lng
             event.location=event.location.address
-            print(event.location)
-            print(event.eventlocation)
-            """"
-            geolocator = Nominatim(user_agent="finde")
-            location=request.POST.get('location')
-            loc=geocoder.osm(location)
-            lat=loc.lat
-            lng=loc.lng
-            event.eventlocation = [lat,lng]
-            m = folium.Map(width=500,height=400, max_zoom=12, min_zoom=6, zoom_start=8,location=event.eventlocation)
-            folium.Marker(location=event.eventlocation, icon=folium.Icon(color='red')).add_to(m)
-            """
+         
             if event.type == "gathering" and event.credits != 0:
                 messages.success(request, 'For gatherings, number of credits should be zero!')
                 event.credits = 0
+            
+            if profile.credits + event.credits > 15:
+                messages.error(request, 'Your total credits cannot be higher than 15!')
+                return redirect('events')
             
             
             event.save()
@@ -279,21 +274,7 @@ def deleteevent(request, pk):
             elif (eventObj.owner == profile) and (status.eventstatus == 'done') and (datetime.date.today()>eventObj.date):
                 status.eventstatus = 'done'
                 status.save()
-            '''''
-                for i in attendanceObj:
-                    #form = StatusForm(request.POST)
-                    if i.status=='approved':
-                        profile = Profiles.objects.get(username=i.owner)
-                        profile.credits = (profile.credits - eventObj.credits)
-                        profile.save()
-                
-                profile = request.user.profiles
-                profile.credits = (profile.credits + eventObj.credits)
-                profile.save()
-            elif (eventObj.owner == profile) and (status.eventstatus == 'canceled'):
-                    status.save()
-                    eventObj.save()
-            '''''
+        
             return redirect('events')
     return render(request, 'deleteevent.html', {'eventObj':eventObj, 'form':form, 'profile':profile, 'attendanceObj':attendanceObj})
 

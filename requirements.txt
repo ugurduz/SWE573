@@ -2,8 +2,8 @@ Django>=3.0,<4.0
 psycopg2>=2.8
 Pillow==8.4.0
 
-geographiclib==1.52 
+geographiclib==1.52
 geopy==2.2.0
 django-location-field==2.1.0
-folium==2.22.0
-geocoder==2.22.0
+folium==0.12.1.post1
+geocoder>=0.5.7
